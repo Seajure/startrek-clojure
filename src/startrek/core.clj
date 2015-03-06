@@ -152,9 +152,8 @@
   (println)
   (println "ENTER SEED NUMBER ")
   (let [seed (parse-number (read-line))]
-    (binding  [gen/*rnd*  (java.util.Random. seed)])
-
-    (with-redefs [u/message println
+    (binding  [gen/*rnd*  (java.util.Random. seed)]
+      (with-redefs [u/message println
                   n/pick-course user-input
                   n/pick-warp-factor user-input
                   e/pick-phaser-power user-input
@@ -163,4 +162,4 @@
                   c/pick-computer-command  user-input 
                   c/pick-coordinate  user-input 
                   ]
-    (play-game))))
+    (play-game)))))
