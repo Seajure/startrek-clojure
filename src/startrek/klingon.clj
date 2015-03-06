@@ -20,7 +20,7 @@
 
 (defn- klingon-attack [enterprise klingon]
   (if (or (klingon-dead? klingon) (< (:shields enterprise) 0))
-    enterprise
+    (reduced enterprise)
     (let [r (klingon-shot enterprise klingon)]
       (u/message (format "%3.1f UNIT HIT ON ENTERPRISE FROM SECTOR %s   (%3.1f LEFT)" 
                      (:hit r)
