@@ -80,7 +80,7 @@
     (pos? (get sector (u/coord-to-index p)))))
 
 (defn- set-sector-position [game-state factor coord]
-  (let [e {:sector (vec (map #(math/round %) coord))
+  (let [e {:sector (mapv #(math/round %) coord)
            :energy (- (get-in @game-state [:enterprise :energy])
                       (+ -5 (* 8 (int factor))))}]
   (swap! game-state update-in [:enterprise] merge e))
