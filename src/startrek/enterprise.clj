@@ -53,6 +53,7 @@
   "Used by the player to fire a photon torpedo in a specific direction. Only works if klingons
   are in the current quadrant. Will fail to work if the system is damaged."
   [game-state]
+  {:pre [(some? game-state)]}
   (if (neg? (get-in @game-state [:enterprise :damage :photon_torpedo_tubes]))
     (u/message "PHOTON TUBES ARE NOT OPERATIONAL")
     (if (pos? (get-in @game-state [:enterprise :photon_torpedoes]))
