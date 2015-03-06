@@ -66,7 +66,7 @@
   [game-state]
   (if (neg? (get-in @game-state [:enterprise :damage :shields]))
       (u/message "SHIELD CONTROL IS NON-OPERATIONAL")
-      (shield-control game-state)))
+      (swap! game-state shield-control)))
 
 (defn damage-control-report-command
   "Triggered by direct user action, this command is responsible for
@@ -236,14 +236,15 @@
       )))
 
 (defn- shield-control [game-state]
-  (let [power (select-shield-power (get-in @game-state [:enterprise :energy])
-                                   (get-in @game-state [:enterprise :shields]))]
-    (when (pos? power)
-      (swap! game-state update-in [:enterprise :energy] +
-             (- (get-in @game-state [:enterprise :shields])
-                power))
-      (swap! game-state assoc-in [:enterprise :shields] power)))
-  game-state)
+  (let [power (select-shield-power (get-in game-state [:enterprise :energy])
+                                   (get-in game-state [:enterprise :shields]))]
+    (if (pos? power)
+      (-> game-state
+          (update-in [:enterprise :energy]
+                     + (- (get-in game-state [:enterprise :shields])
+                          power))
+          (assoc-in [:enterprise :shields] power))
+      game-state)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; The functions repair damage to the enterprise during turns.
